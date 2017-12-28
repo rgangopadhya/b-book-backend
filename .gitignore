@@ -1,0 +1,5 @@
+*.egg-info/
+build/
+*.sqlite3
+*.pyc
+*__pycache__/*

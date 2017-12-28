@@ -1,0 +1,1 @@
+from bbook_backend.settings import *  # noqa

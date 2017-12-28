@@ -1,0 +1,6 @@
+Django==2.0
+djx
+boto3
+django-storages
+dynamic-rest==1.6.7
+djangorestframework==3.7.4
