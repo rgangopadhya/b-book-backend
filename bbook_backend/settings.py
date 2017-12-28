@@ -16,7 +16,7 @@ For a deployment checklist before going to production, see
 
 import os
 from djx.environment import get_boolean, get_string
-from djx.database import parse
+import dj_database_url
 
 ALLOWED_HOSTS = []
 
@@ -65,8 +65,8 @@ DATABASES = {
     }
 }
 
-# if DATABASE_URL:
-#     DATABASES['default'] = parse('DATABASE_URL')
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_boolean('DEBUG', True)
