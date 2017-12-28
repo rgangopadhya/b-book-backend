@@ -5,3 +5,4 @@ django-storages==1.6.5
 dynamic-rest==1.6.7
 djangorestframework==3.7.4
 gunicorn==19.7.1
+psycopg2==2.7.3.2
