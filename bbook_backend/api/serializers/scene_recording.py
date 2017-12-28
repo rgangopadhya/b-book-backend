@@ -15,6 +15,7 @@ class SceneRecordingSerializer(BaseSerializer):
     name = 'scene_recording'
     fields = (
       'created_at',
+      'id',
       'recording',
       'scene',
       'story',

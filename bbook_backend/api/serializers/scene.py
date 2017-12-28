@@ -14,6 +14,7 @@ class SceneSerializer(BaseSerializer):
     fields = (
       'creator',
       'created_at',
+      'id',
       'image',
     )
 

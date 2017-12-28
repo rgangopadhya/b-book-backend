@@ -14,6 +14,7 @@ class StorySerializer(BaseSerializer):
     fields = (
       'creator',
       'created_at',
+      'id',
       'recordings',
     )
 
