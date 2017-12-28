@@ -65,8 +65,8 @@ DATABASES = {
     }
 }
 
-if DATABASE_URL:
-    DATABASES['default'] = parse('DATABASE_URL')
+# if DATABASE_URL:
+#     DATABASES['default'] = parse('DATABASE_URL')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = get_boolean('DEBUG', True)
