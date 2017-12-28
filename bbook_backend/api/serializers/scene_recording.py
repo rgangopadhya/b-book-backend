@@ -3,7 +3,9 @@ from dynamic_rest.serializers import (
   DynamicRelationField,
 )
 from .base import BaseSerializer
-from bbook_backend.models import SceneRecording
+from bbook_backend.models import (
+  SceneRecording,
+)
 
 
 class SceneRecordingSerializer(BaseSerializer):
@@ -14,9 +16,13 @@ class SceneRecordingSerializer(BaseSerializer):
     fields = (
       'created_at',
       'recording',
+      'scene',
       'story',
     )
 
+  scene = DynamicRelationField(
+    'bbook_backend.api.serializers.SceneSerializer',
+  )
   story = DynamicRelationField(
     'bbook_backend.api.serializers.StorySerializer',
   )

@@ -1,6 +1,7 @@
 from django.db import models
 from .base import Model
 from .story import Story
+from .scene import Scene
 from bbook_backend.storage_backends import SceneRecordingStorage
 
 class SceneRecording(Model):
@@ -11,6 +12,12 @@ class SceneRecording(Model):
       Story,
       on_delete=models.CASCADE,
       related_name='recordings',
+    )
+    scene = models.ForeignKey(
+      Scene,
+      on_delete=models.CASCADE,
+      related_name='recordings',
+      default=None,
     )
     created_at = models.DateTimeField(auto_now_add=True)
     recording = models.FileField(storage=SceneRecordingStorage())
