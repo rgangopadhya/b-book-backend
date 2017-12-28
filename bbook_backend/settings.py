@@ -108,6 +108,9 @@ SECRET_KEY = get_string('DJANGO_SECRET_KEY', 'test')
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 STATIC_URL = '/static/'
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -136,6 +139,6 @@ WSGI_APPLICATION = '%s.wsgi.application' % APP
 
 AWS_STORAGE_BUCKET_NAME = get_string('BUCKET_NAME', 'b-book-test')
 
-AWS_ACCESS_KEY_ID = get_string('AWS_ACCESS_KEY_ID', 'AKIAI6O4IGYQPHPGJS2A')
-AWS_SECRET_ACCESS_KEY = get_string('AWS_SECRET_ACCESS_KEY', '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')
+AWS_ACCESS_KEY_ID = get_string('AWS_ACCESS_KEY_ID', '')
+AWS_SECRET_ACCESS_KEY = get_string('AWS_SECRET_ACCESS_KEY', '')
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
