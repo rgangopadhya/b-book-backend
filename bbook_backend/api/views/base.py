@@ -5,9 +5,9 @@ class AddCreatorMixin(object):
 
   def create(self, request):
     creator = request.user
-    data = request.data
-    if not data.get('creator'):
-      data['creator'] = creator.pk
+    request.data = request.data.copy()
+    if not request.data.get('creator'):
+      request.data['creator'] = creator.pk
     return super().create(request)
 
 
