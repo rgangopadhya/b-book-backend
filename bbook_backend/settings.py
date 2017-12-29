@@ -82,6 +82,7 @@ INSTALLED_APPS = [
     'storages',
     'dynamic_rest',
     'rest_framework',
+    'rest_framework.authtoken',
     'bbook_backend',
 ]
 
@@ -145,3 +146,11 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
