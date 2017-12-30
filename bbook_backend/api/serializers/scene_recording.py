@@ -9,6 +9,7 @@ from bbook_backend.models import (
 
 
 class SceneRecordingSerializer(BaseSerializer):
+  CREATOR_FIELD = None
 
   class Meta:
     model = SceneRecording

@@ -22,7 +22,6 @@ from djx.urls import load_urls
 from inspect import isclass
 from dynamic_rest.routers import DynamicRouter
 from bbook_backend.api import views
-from bbook_backend.api.views.auth_views import BBookLoginView
 from rest_framework.authtoken import views as authtoken_views
 
 
@@ -52,6 +51,5 @@ register_views(views)
 
 urlpatterns.extend([
     url(r'^', include(router.urls)),
-    path('accounts/login/', BBookLoginView.as_view(), name='login'),
     url(r'^api-token-auth/', authtoken_views.obtain_auth_token),
 ])
