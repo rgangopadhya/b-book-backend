@@ -19,5 +19,6 @@ class SceneRecording(Model):
       related_name='recordings',
       default=None,
     )
+    order = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     recording = models.FileField(storage=SceneRecordingStorage())
