@@ -52,4 +52,6 @@ register_views(views)
 urlpatterns.extend([
     url(r'^', include(router.urls)),
     url(r'^api-token-auth/', authtoken_views.obtain_auth_token),
+    url(r'^rest-auth/', include('rest_auth.urls')),
+    url(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
 ])

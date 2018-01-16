@@ -2,8 +2,9 @@ Django==2.0
 djx==0.0.3
 boto3==1.5.6
 django-storages==1.6.5
--e git://github.com/rgangopadhya/dynamic-rest@master#egg=dynamic-rest
+-e git://github.com/rgangopadhya/dynamic-rest@8069bcf9aedaae899ebade608730e68c6ae714ba#egg=dynamic-rest
 djangorestframework==3.7.4
 gunicorn==19.7.1
 psycopg2==2.7.3.2
 moto==1.1.25
+django-rest-auth[with_social]==0.9.2
