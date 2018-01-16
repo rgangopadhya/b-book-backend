@@ -94,6 +94,9 @@ INSTALLED_APPS = [
 # needed for rest_auth.registration
 SITE_ID = 1
 
+# for now, turn off registration email confirmation
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
 LANGUAGE_CODE = 'en-us'
