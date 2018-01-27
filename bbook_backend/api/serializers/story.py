@@ -19,6 +19,7 @@ class StorySerializer(BaseSerializer):
       'creator',
       'created_at',
       'cover_image',
+      'duration',
       'id',
       'recordings',
     )
@@ -29,6 +30,9 @@ class StorySerializer(BaseSerializer):
   )
 
   cover_image = DynamicMethodField(
+    requires=['recordings.']
+  )
+  duration = DynamicMethodField(
     requires=['recordings.']
   )
 
@@ -42,3 +46,9 @@ class StorySerializer(BaseSerializer):
       pass
 
     return FileField().to_representation(image)
+
+  def get_duration(self, instance):
+    try:
+      return sum([r.duration for r in instance.recordings.all()])
+    except:
+      pass
