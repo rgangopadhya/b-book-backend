@@ -49,6 +49,9 @@ def register_views(views):
 register_views(views)
 
 
+router.register(r'v0/story_recordings', views.StoryRecordingViewSet)
+
+
 urlpatterns.extend([
     url(r'^', include(router.urls)),
     url(r'^api-token-auth/', authtoken_views.obtain_auth_token),

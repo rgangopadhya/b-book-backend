@@ -1,5 +1,6 @@
 from dynamic_rest.serializers import (
   DynamicRelationField,
+  DynamicEphemeralSerializer,
 )
 from dynamic_rest.fields import (
   DynamicMethodField,
@@ -7,6 +8,7 @@ from dynamic_rest.fields import (
 from rest_framework.serializers import FileField
 from .base import BaseSerializer
 from bbook_backend.models import Story
+from .scene_recording import SceneRecordingSerializer
 
 
 class StorySerializer(BaseSerializer):
@@ -52,3 +54,35 @@ class StorySerializer(BaseSerializer):
       return sum([r.duration for r in instance.recordings.all()])
     except:
       pass
+
+
+class _StoryRecording():
+
+  def __init__(self, user, recordings, story):
+    self.creator = user
+    self.recordings = recordings
+    self.story = story
+
+
+class StoryRecordingSerializer(DynamicEphemeralSerializer):
+
+  class Meta:
+    name = 'story_recording'
+    fields = (
+      'creator',
+      'story',
+      'recordings',
+    )
+
+  creator = DynamicRelationField(
+    'bbook_backend.api.serializers.UserSerializer',
+    required=False,
+  )
+  recordings = DynamicRelationField(
+    'bbook_backend.api.serializers.SceneRecordingSerializer',
+    many=True,
+  )
+  story = DynamicRelationField(
+    'bbook_backend.api.serializers.StorySerializer',
+    required=False,
+  )

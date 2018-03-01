@@ -1,3 +1,4 @@
+import json
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -56,3 +57,45 @@ class StoryAPITestCase(TestCase):
     self.assertEqual(len(data), 1)
     story = data[0]
     self.assertIn(self.scene.image.file.name, story['cover_image'])
+
+
+class StoryRecordingAPITestCase(TestCase):
+
+  def setUp(self):
+    self.client = Client()
+    self.mock_s3 = mock_s3()
+    self.mock_s3.start()
+    conn = boto3.resource('s3', region_name='us-east-1')
+    conn.create_bucket(Bucket='b-book-test')
+    self.scene_image1 = SimpleUploadedFile('test.jpg', b'wooo')
+    self.scene_image2 = SimpleUploadedFile('test2.jpg', b'blahhh')
+    self.admin = User.objects.create(username='admin')
+    self.admin.set_password('blah')
+    self.admin.save()
+    self.scene1 = Scene.objects.create(
+      creator=self.admin,
+      image=self.scene_image1
+    )
+    self.scene2 = Scene.objects.create(
+      creator=self.admin,
+      image=self.scene_image2
+    )
+
+  def test_story_recording_post(self):
+    self.client.login(username='admin', password='blah')
+    recording1 = SimpleUploadedFile('recording1.mp3', b'yep')
+    recording2 = SimpleUploadedFile('recording2.mp3', b'yephah')
+    data = {
+        self.scene1.pk: recording1,
+        self.scene2.pk: recording2
+    }
+    response = self.client.post(
+      '/v0/story_recordings/', data
+    )
+    self.assertEqual(response.status_code, 201)
+    data = response.json()
+    recordings = data['recordings']
+    self.assertEqual(len(recordings), 2)
+    self.assertIsNotNone(data['story'])
+    import pdb
+    pdb.set_trace()
