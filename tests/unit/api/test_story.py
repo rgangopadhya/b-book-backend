@@ -86,10 +86,12 @@ class StoryRecordingAPITestCase(TestCase):
     recording1 = SimpleUploadedFile('recording1.mp3', b'yep')
     recording2 = SimpleUploadedFile('recording2.mp3', b'yephah')
     expected_order = [self.scene1.pk, self.scene2.pk]
+    expected_durations = [100, 300]
     data = {
         self.scene1.pk: recording1,
         self.scene2.pk: recording2,
-        'scene_order': expected_order
+        'scene_order': expected_order,
+        'durations': expected_durations
     }
     response = self.client.post(
       '/v0/story_recordings/', data

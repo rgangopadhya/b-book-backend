@@ -32,6 +32,7 @@ class StoryRecordingViewSet(BaseViewSet):
     scene_id1: recording1,
     scene_id2: recording2,
     scene_order: [scene_id1, scene_id2],
+    durations: []
     ...
   }
   """
@@ -41,16 +42,18 @@ class StoryRecordingViewSet(BaseViewSet):
   def _create_scene_recordings(self, request, story):
     try:
       scene_order = request.data.getlist('scene_order')
+      durations = request.data.getlist('durations')
     except KeyError:
       raise Exception('orders key required')
 
     result = []
-    for scene_id in scene_order:
+    for scene_id, duration in zip(scene_order, durations):
       recording = request.data[scene_id]
       serializer = SceneRecordingSerializer(data={
         'story': story.pk,
         'scene': scene_id,
         'recording': recording,
+        'duration': duration
       })
       serializer.is_valid(raise_exception=True)
       result.append(serializer.save())
