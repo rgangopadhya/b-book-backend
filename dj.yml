@@ -1,4 +1,4 @@
 devRequirements: requirements.txt.dev
 name: bbook_backend
 requirements: requirements.txt
-runtime: !!python/unicode '3.6.3'
+runtime: !!python/unicode '3.6.4'
