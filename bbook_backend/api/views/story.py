@@ -1,5 +1,6 @@
 from rest_framework.permissions import IsAuthenticated
 from .base import BaseViewSet
+from django.db import transaction
 from bbook_backend.models import (
   Scene,
   Story,
@@ -30,26 +31,37 @@ class StoryRecordingViewSet(BaseViewSet):
   {
     scene_id1: recording1,
     scene_id2: recording2,
+    scene_order: [scene_id1, scene_id2],
     ...
   }
   """
   serializer_class = StoryRecordingSerializer
   permission_classes = (IsAuthenticated,)
 
-  def create(self, *args, **kwargs):
-    data = []
-    user = self.request.user
-    story = Story.objects.create(creator=user)
-    for scene_id in self.request.data.keys():
-      recording = self.request.data[scene_id]
+  def _create_scene_recordings(self, request, story):
+    try:
+      scene_order = request.data.getlist('scene_order')
+    except KeyError:
+      raise Exception('orders key required')
+
+    result = []
+    for scene_id in scene_order:
+      recording = request.data[scene_id]
       serializer = SceneRecordingSerializer(data={
         'story': story.pk,
         'scene': scene_id,
-        'recording': recording
+        'recording': recording,
       })
       serializer.is_valid(raise_exception=True)
-      data.append(serializer.save())
-    story_recording = _StoryRecording(user, data, story)
-    serializer = StoryRecordingSerializer(story_recording)
+      result.append(serializer.save())
+    return result
+
+  @transaction.atomic
+  def create(self, request, *args, **kwargs):
+    user = request.user
+    story = Story.objects.create(creator=user)
+    recordings = self._create_scene_recordings(request, story)
+    story_recording = _StoryRecording(user, recordings, story)
+    serializer = self.get_serializer(story_recording)
     headers = self.get_success_headers(serializer.data)
     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

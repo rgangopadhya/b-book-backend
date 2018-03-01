@@ -85,17 +85,18 @@ class StoryRecordingAPITestCase(TestCase):
     self.client.login(username='admin', password='blah')
     recording1 = SimpleUploadedFile('recording1.mp3', b'yep')
     recording2 = SimpleUploadedFile('recording2.mp3', b'yephah')
+    expected_order = [self.scene1.pk, self.scene2.pk]
     data = {
         self.scene1.pk: recording1,
-        self.scene2.pk: recording2
+        self.scene2.pk: recording2,
+        'scene_order': expected_order
     }
     response = self.client.post(
       '/v0/story_recordings/', data
     )
     self.assertEqual(response.status_code, 201)
-    data = response.json()
+    data = response.json()['story_recording']
     recordings = data['recordings']
     self.assertEqual(len(recordings), 2)
     self.assertIsNotNone(data['story'])
-    import pdb
-    pdb.set_trace()
+    self.assertEqual(expected_order, recordings)

@@ -185,3 +185,11 @@ LOGGING = {
         'level': 'INFO',
     }
 }
+
+# disable boto logging
+# too verbose
+import logging
+logging.getLogger('boto3').setLevel(logging.CRITICAL)
+logging.getLogger('botocore').setLevel(logging.CRITICAL)
+logging.getLogger('nose').setLevel(logging.CRITICAL)
+logging.getLogger('s3transfer').setLevel(logging.CRITICAL)
