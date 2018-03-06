@@ -48,7 +48,11 @@ class StoryRecordingViewSet(BaseViewSet):
 
     result = []
     for scene_id, duration in zip(scene_order, durations):
-      recording = request.data[scene_id]
+      try:
+        recording = request.data[scene_id]
+      except Exception as error:
+        print('MultiValue', request.data, scene_id)
+        raise error
       serializer = SceneRecordingSerializer(data={
         'story': story.pk,
         'scene': scene_id,
