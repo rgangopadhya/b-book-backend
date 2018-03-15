@@ -41,10 +41,12 @@ class StoryRecordingViewSet(BaseViewSet):
 
   def _create_scene_recordings(self, request, story):
     try:
-      scene_order = request.data.getlist('scene_order')
-      durations = request.data.getlist('durations')
+      scene_order = request.data.get('scene_order').split(',')
+      durations = request.data.get('durations').split(',')
     except KeyError:
-      raise Exception('orders key required')
+      raise Exception('scene_order key required')
+    if len(scene_order) == 0 or len(durations) == 0:
+      raise Exception('No durations or scene_order')
 
     result = []
     for scene_id, duration in zip(scene_order, durations):

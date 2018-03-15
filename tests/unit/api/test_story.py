@@ -90,8 +90,8 @@ class StoryRecordingAPITestCase(TestCase):
     data = {
         self.scene1.pk: recording1,
         self.scene2.pk: recording2,
-        'scene_order': expected_order,
-        'durations': expected_durations
+        'scene_order': ','.join(map(str, expected_order)),
+        'durations': ','.join(map(str, expected_durations))
     }
     response = self.client.post(
       '/v0/story_recordings/', data
