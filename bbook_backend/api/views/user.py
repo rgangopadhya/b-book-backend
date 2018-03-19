@@ -5,8 +5,7 @@ from bbook_backend.api.serializers import UserSerializer
 
 
 class UserViewSet(BaseViewSet):
-  model = User
-  queryset = User.objects.all()
-  serializer_class = UserSerializer
-  permission_classes = (IsAuthenticated,)
-
+    model = User
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated,)

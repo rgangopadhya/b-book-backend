@@ -6,10 +6,9 @@ from rest_framework.authtoken.models import Token
 
 @receiver(post_save, sender=User)
 def make_token_for_user(sender, **kwargs):
-  user = kwargs.get('instance')
+    user = kwargs.get('instance')
 
-  if not user:
-    return
+    if not user:
+        return
 
-  Token.objects.get_or_create(user=user)
-
+    Token.objects.get_or_create(user=user)

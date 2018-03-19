@@ -1,33 +1,37 @@
-from rest_framework.serializers import FileField
+from rest_framework.serializers import (
+    FileField,
+    IntegerField,
+)
 from dynamic_rest.serializers import (
-  DynamicRelationField,
+    DynamicRelationField,
 )
 from .base import BaseSerializer
 from bbook_backend.models import (
-  SceneRecording,
+    SceneRecording,
 )
 
 
 class SceneRecordingSerializer(BaseSerializer):
-  CREATOR_FIELD = None
+    CREATOR_FIELD = None
 
-  class Meta:
-    model = SceneRecording
-    name = 'scene_recording'
-    fields = (
-      'created_at',
-      'duration',
-      'id',
-      'order',
-      'recording',
-      'scene',
-      'story',
+    class Meta:
+        model = SceneRecording
+        name = 'scene_recording'
+        fields = (
+            'created_at',
+            'duration',
+            'id',
+            'order',
+            'recording',
+            'scene',
+            'story',
+        )
+
+    scene = DynamicRelationField(
+        'bbook_backend.api.serializers.SceneSerializer',
     )
-
-  scene = DynamicRelationField(
-    'bbook_backend.api.serializers.SceneSerializer',
-  )
-  story = DynamicRelationField(
-    'bbook_backend.api.serializers.StorySerializer',
-  )
-  recording = FileField()
+    story = DynamicRelationField(
+        'bbook_backend.api.serializers.StorySerializer',
+    )
+    recording = FileField()
+    order = IntegerField(required=True)

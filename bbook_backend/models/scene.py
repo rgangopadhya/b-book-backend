@@ -5,6 +5,7 @@ from bbook_backend.storage_backends import SceneStorage
 
 
 class Scene(Model):
+
     class Meta:
         app_label = 'bbook_backend'
 

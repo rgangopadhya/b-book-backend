@@ -5,7 +5,7 @@ from bbook_backend.api.serializers import SceneRecordingSerializer
 
 
 class SceneRecordingViewSet(BaseViewSet):
-  model = SceneRecording
-  queryset = SceneRecording.objects.all()
-  serializer_class = SceneRecordingSerializer
-  permission_classes = (IsAuthenticated,)
+    model = SceneRecording
+    queryset = SceneRecording.objects.all()
+    serializer_class = SceneRecordingSerializer
+    permission_classes = (IsAuthenticated,)

@@ -14,11 +14,8 @@ from django.conf.urls import (
     include,
     url,
 )
-from django.urls import path
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.conf import settings
-from djx.urls import load_urls
 from inspect import isclass
 from dynamic_rest.routers import DynamicRouter
 from bbook_backend.api import views
@@ -43,7 +40,7 @@ def register_views(views):
             getattr(view, 'serializer_class', None) and
             getattr(view, 'IS_CANONICAL', True)
         ):
-          router.register_resource(view, namespace='v0')
+            router.register_resource(view, namespace='v0')
 
 
 register_views(views)

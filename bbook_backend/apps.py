@@ -7,5 +7,5 @@ class AppConfig(_AppConfig):
     name = 'bbook_backend'
 
     def ready(self):
-      import bbook_backend.signals
-      super().ready()
+        import bbook_backend.signals  # noqa
+        super().ready()

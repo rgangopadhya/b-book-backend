@@ -17,6 +17,7 @@ For a deployment checklist before going to production, see
 import os
 from djx.environment import get_boolean, get_string
 import dj_database_url
+import logging
 
 ALLOWED_HOSTS = []
 
@@ -188,7 +189,6 @@ LOGGING = {
 
 # disable boto logging
 # too verbose
-import logging
 logging.getLogger('boto3').setLevel(logging.CRITICAL)
 logging.getLogger('botocore').setLevel(logging.CRITICAL)
 logging.getLogger('nose').setLevel(logging.CRITICAL)
