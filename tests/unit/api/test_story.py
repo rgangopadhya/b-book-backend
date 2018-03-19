@@ -23,11 +23,13 @@ class StoryAPITestCase(TestCase):
         self.admin = User.objects.create(username='admin')
         self.admin.set_password('blah')
         self.admin.save()
+        self.other_user = User.objects.create(username='other')
         self.scene = Scene.objects.create(
             creator=self.admin,
             image=self.scene_image
         )
         self.story = Story.objects.create(creator=self.admin)
+        self.other_story = Story.objects.create(creator=self.other_user)
 
     def tearDown(self):
         self.mock_s3.stop()
@@ -40,6 +42,16 @@ class StoryAPITestCase(TestCase):
         self.assertEqual(len(data), 1)
         story = data[0]
         self.assertIsNone(story['cover_image'])
+
+    def test_can_retrieve_own_story(self):
+        self.client.login(username='admin', password='blah')
+        response = self.client.get('/v0/stories/%s/' % self.story.pk)
+        self.assertEqual(response.status_code, 200)
+
+    def test_cant_retrieve_other_user_stories(self):
+        self.client.login(username='admin', password='blah')
+        response = self.client.get('/v0/stories/%s/' % self.other_story.pk)
+        self.assertEqual(response.status_code, 404)
 
     def test_get_cover_image(self):
         # now add a recording

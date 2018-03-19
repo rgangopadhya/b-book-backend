@@ -22,6 +22,12 @@ class StoryViewSet(BaseViewSet):
     serializer_class = StorySerializer
     permission_classes = (IsAuthenticated,)
 
+    def filter_queryset(self, queryset):
+        user = self.request.user
+        return super().filter_queryset(queryset).filter(
+            creator=user
+        )
+
 
 class StoryRecordingViewSet(BaseViewSet):
     """
