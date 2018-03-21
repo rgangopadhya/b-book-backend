@@ -9,7 +9,6 @@ class RegistrationAPITestCase(TestCase):
 
     def test_can_create_new_user(self):
         data = {
-            'username': 'woo',
             'email': 'woo@gmail.com',
             'password1': 'blahblah',
             'password2': 'blahblah'
@@ -21,7 +20,7 @@ class RegistrationAPITestCase(TestCase):
 
         # then use this key in auth login
         response = self.client.get(
-            '/v0/users/?per_page=1',
+            '/v0/users/me/',
             {},
             Authorization='Token %s' % body['key']
         )
