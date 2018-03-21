@@ -97,6 +97,8 @@ SITE_ID = 1
 
 # for now, turn off registration email confirmation
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+# allauth: dont require username
+ACCOUNT_USERNAME_REQUIRED = False
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.0/topics/i18n/
