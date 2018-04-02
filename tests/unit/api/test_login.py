@@ -9,6 +9,7 @@ class RegistrationAPITestCase(TestCase):
 
     def test_can_create_new_user(self):
         data = {
+            'username': 'woo',
             'email': 'woo@gmail.com',
             'password1': 'blahblah',
             'password2': 'blahblah'
@@ -24,4 +25,14 @@ class RegistrationAPITestCase(TestCase):
             {},
             Authorization='Token %s' % body['key']
         )
+        self.assertEqual(response.status_code, 200)
+
+        # logout
+        response = self.client.post('/rest-auth/logout/')
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.post('/api-token-auth/', {
+            'username': 'woo',
+            'password': 'blahblah'
+        })
         self.assertEqual(response.status_code, 200)
