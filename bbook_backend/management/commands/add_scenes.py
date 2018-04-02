@@ -13,10 +13,12 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--username', action='store')
         parser.add_argument('--directory', action='store')
+        parser.add_argument('--character', action='store')
 
     def handle(self, *args, **options):
         username = options.get('username')
         directory = options.get('directory')
+        character_name = options.get('character')
         print('=== Got username %s, directory %s' % (username, directory))
         if not username:
             raise CommandError('Please provide a username')
@@ -24,6 +26,11 @@ class Command(BaseCommand):
             raise CommandError('Please provide a directory')
 
         user = User.objects.get(username=username)
+        # we dont make name unique though...
+        character, _ = Character.objects.get_or_create(
+            name=character_name,
+            creator=user,
+        )
 
         for filename in os.listdir(directory):
             if '.png' not in filename:
@@ -34,4 +41,5 @@ class Command(BaseCommand):
                 Scene.objects.get_or_create(
                     image=file,
                     creator=user,
+                    character=character,
                 )
