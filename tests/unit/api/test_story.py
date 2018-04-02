@@ -81,12 +81,14 @@ class StoryRecordingAPITestCase(TestCase):
         conn.create_bucket(Bucket='b-book-test')
         self.scene_image1 = SimpleUploadedFile('test.jpg', b'wooo')
         self.scene_image2 = SimpleUploadedFile('test2.jpg', b'blahhh')
+        self.char_image = SimpleUploadedFile('test3.jpg', b'hax')
         self.admin = User.objects.create(username='admin')
         self.admin.set_password('blah')
         self.admin.save()
         self.character = Character.objects.create(
             name='hairy',
             creator=self.admin,
+            image=self.char_image,
         )
         self.scene1 = Scene.objects.create(
             creator=self.admin,

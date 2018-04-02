@@ -1,3 +1,4 @@
+from rest_framework.serializers import FileField
 from dynamic_rest.serializers import (
     DynamicRelationField,
 )
@@ -14,9 +15,11 @@ class CharacterSerializer(BaseSerializer):
             'creator',
             'created_at',
             'id',
+            'image',
             'name',
         )
 
     creator = DynamicRelationField(
         'bbook_backend.api.serializers.UserSerializer',
     )
+    image = FileField()

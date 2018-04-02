@@ -5,7 +5,10 @@ from django.core.management.base import (
     CommandError,
 )
 from django.core.files import File
-from bbook_backend.models import Scene
+from bbook_backend.models import (
+    Character,
+    Scene,
+)
 
 
 class Command(BaseCommand):

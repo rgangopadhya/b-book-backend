@@ -19,12 +19,14 @@ class SceneRecordingAPITestCase(TestCase):
         conn = boto3.resource('s3', region_name='us-east-1')
         conn.create_bucket(Bucket='b-book-test')
         self.scene_image = SimpleUploadedFile('test.jpg', b'wooo')
+        self.char_image = SimpleUploadedFile('t2.jpg', b'hax')
         self.admin = User.objects.create(username='admin')
         self.admin.set_password('blah')
         self.admin.save()
         self.character = Character.objects.create(
             name='hairy',
             creator=self.admin,
+            image=self.char_image,
         )
         self.scene = Scene.objects.create(
             creator=self.admin,
