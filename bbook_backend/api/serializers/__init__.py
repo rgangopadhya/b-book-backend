@@ -6,3 +6,4 @@ from .story import (
     StoryRecordingSerializer,
 )
 from .user import UserSerializer
+from .character import CharacterSerializer

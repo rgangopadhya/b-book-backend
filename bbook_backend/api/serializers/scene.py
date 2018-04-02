@@ -12,12 +12,17 @@ class SceneSerializer(BaseSerializer):
         model = Scene
         name = 'scene'
         fields = (
+            'character',
             'creator',
             'created_at',
             'id',
             'image',
         )
 
+    character = DynamicRelationField(
+        'bbook_backend.api.serializers.CharacterSerializer',
+        required=True,
+    )
     creator = DynamicRelationField(
         'bbook_backend.api.serializers.UserSerializer',
     )

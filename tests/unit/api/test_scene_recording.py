@@ -5,6 +5,7 @@ from django.test import Client
 from moto import mock_s3
 import boto3
 from bbook_backend.models import (
+    Character,
     Scene,
     Story,
 )
@@ -21,11 +22,19 @@ class SceneRecordingAPITestCase(TestCase):
         self.admin = User.objects.create(username='admin')
         self.admin.set_password('blah')
         self.admin.save()
+        self.character = Character.objects.create(
+            name='hairy',
+            creator=self.admin,
+        )
         self.scene = Scene.objects.create(
             creator=self.admin,
             image=self.scene_image,
+            character=self.character,
         )
-        self.story = Story.objects.create(creator=self.admin)
+        self.story = Story.objects.create(
+            creator=self.admin,
+            character=self.character,
+        )
 
     @mock_s3
     def test_can_save_recording(self):

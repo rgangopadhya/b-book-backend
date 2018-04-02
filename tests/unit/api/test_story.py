@@ -5,6 +5,7 @@ from django.test import Client
 from moto import mock_s3
 import boto3
 from bbook_backend.models import (
+    Character,
     Scene,
     SceneRecording,
     Story,
@@ -83,13 +84,19 @@ class StoryRecordingAPITestCase(TestCase):
         self.admin = User.objects.create(username='admin')
         self.admin.set_password('blah')
         self.admin.save()
+        self.character = Character.objects.create(
+            name='hairy',
+            creator=self.admin,
+        )
         self.scene1 = Scene.objects.create(
             creator=self.admin,
-            image=self.scene_image1
+            image=self.scene_image1,
+            character=self.character,
         )
         self.scene2 = Scene.objects.create(
             creator=self.admin,
-            image=self.scene_image2
+            image=self.scene_image2,
+            character=self.character,
         )
 
     def test_story_recording_post(self):
@@ -102,7 +109,8 @@ class StoryRecordingAPITestCase(TestCase):
                 self.scene1.pk: recording1,
                 self.scene2.pk: recording2,
                 'scene_order': ','.join(map(str, expected_order)),
-                'durations': ','.join(map(str, expected_durations))
+                'durations': ','.join(map(str, expected_durations)),
+                'character': self.character.pk,
         }
         response = self.client.post(
             '/v0/story_recordings/', data

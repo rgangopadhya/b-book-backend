@@ -6,3 +6,4 @@ from .story import (
 from .scene import SceneViewSet
 from .scene_recording import SceneRecordingViewSet
 from .user import UserViewSet
+from .character import CharacterViewSet

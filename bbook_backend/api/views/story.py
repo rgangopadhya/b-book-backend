@@ -36,7 +36,8 @@ class StoryRecordingViewSet(BaseViewSet):
         scene_id1: recording1,
         scene_id2: recording2,
         scene_order: [scene_id1, scene_id2],
-        durations: []
+        durations: [],
+        character: character_pk
         ...
     }
     """
@@ -73,7 +74,10 @@ class StoryRecordingViewSet(BaseViewSet):
     @transaction.atomic
     def create(self, request, *args, **kwargs):
         user = request.user
-        story = Story.objects.create(creator=user)
+        story = Story.objects.create(
+            creator=user,
+            character_id=request.data['character'],
+        )
         recordings = self._create_scene_recordings(request, story)
         story_recording = _StoryRecording(user, recordings, story)
         serializer = self.get_serializer(story_recording)

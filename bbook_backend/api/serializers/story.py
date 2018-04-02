@@ -17,6 +17,7 @@ class StorySerializer(BaseSerializer):
         name = 'story'
         plural_name = 'stories'
         fields = (
+            'character',
             'creator',
             'created_at',
             'cover_image',
@@ -29,7 +30,10 @@ class StorySerializer(BaseSerializer):
         'bbook_backend.api.serializers.SceneRecordingSerializer',
         many=True,
     )
-
+    character = DynamicRelationField(
+        'bbook_backend.api.serializers.CharacterSerializer',
+        required=True,
+    )
     cover_image = DynamicMethodField(
         requires=['recordings.scene.']
     )
