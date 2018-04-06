@@ -1,52 +1,27 @@
 from django.test import TestCase
-from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from moto import mock_s3
-import boto3
-from bbook_backend.models import (
-    Character,
-    Scene,
-    Story,
-)
+from tests.unit.fixtures import StoryFixture
 
 
 class SceneRecordingAPITestCase(TestCase):
 
-    @mock_s3
     def setUp(self):
         self.client = Client()
-        conn = boto3.resource('s3', region_name='us-east-1')
-        conn.create_bucket(Bucket='b-book-test')
-        self.scene_image = SimpleUploadedFile('test.jpg', b'wooo')
-        self.char_image = SimpleUploadedFile('t2.jpg', b'hax')
-        self.admin = User.objects.create(username='admin')
-        self.admin.set_password('blah')
-        self.admin.save()
-        self.character = Character.objects.create(
-            name='hairy',
-            creator=self.admin,
-            image=self.char_image,
-        )
-        self.scene = Scene.objects.create(
-            creator=self.admin,
-            image=self.scene_image,
-            character=self.character,
-        )
-        self.story = Story.objects.create(
-            creator=self.admin,
-            character=self.character,
-        )
+        self.mock_s3 = mock_s3()
+        self.mock_s3.start()
+        self.fixture = StoryFixture()
 
-    @mock_s3
+    def tearDown(self):
+        self.mock_s3.stop()
+
     def test_can_save_recording(self):
-        conn = boto3.resource('s3', region_name='us-east-1')
-        conn.create_bucket(Bucket='b-book-test')
-        self.client.login(username='admin', password='blah')
+        self.fixture.login_user(self.client)
         recording = SimpleUploadedFile('recording.mp3', b'yep')
         response = self.client.post('/v0/scene_recordings/', {
-            'scene': self.scene.pk,
-            'story': self.story.pk,
+            'scene': self.fixture.scene1.pk,
+            'story': self.fixture.story.pk,
             'recording': recording,
             'order': 0
         })

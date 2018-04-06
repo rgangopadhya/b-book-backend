@@ -9,3 +9,10 @@ class SceneViewSet(BaseViewSet):
     queryset = Scene.objects.all()
     serializer_class = SceneSerializer
     permission_classes = (IsAuthenticated,)
+
+    def filter_queryset(self, queryset):
+        queryset = super().filter_queryset(queryset)
+        random_page_size = self.request.data.get('random', 0)
+        if random_page_size:
+            queryset = queryset.order_by('?')[:random_page_size]
+        return queryset
