@@ -1,11 +1,11 @@
 from django.test import TestCase
-from django.test import Client
+from rest_framework.test import APIClient
 
 
 class RegistrationAPITestCase(TestCase):
 
     def setUp(self):
-        self.client = Client()
+        self.client = APIClient()
 
     def test_can_create_new_user(self):
         data = {

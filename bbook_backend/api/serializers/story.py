@@ -24,6 +24,7 @@ class StorySerializer(BaseSerializer):
             'duration',
             'id',
             'recordings',
+            'title',
         )
 
     recordings = DynamicRelationField(
@@ -40,6 +41,7 @@ class StorySerializer(BaseSerializer):
     duration = DynamicMethodField(
         requires=['recordings.']
     )
+    title = FileField()
 
     def get_cover_image(self, instance):
         image = None
@@ -48,7 +50,7 @@ class StorySerializer(BaseSerializer):
                 instance.recordings.all(), key=lambda rec: rec.order
             ).scene.image
         except Exception as e:
-            print('Failed', e)
+            print('get_cover_image failed', e)
 
         return FileField().to_representation(image)
 
@@ -56,7 +58,7 @@ class StorySerializer(BaseSerializer):
         try:
             return sum([r.duration for r in instance.recordings.all()])
         except Exception as e:
-            print('Failed', e)
+            print('get_duration failed', e)
 
 
 class _StoryRecording():

@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.test import Client
+from rest_framework.test import APIClient
 from moto import mock_s3
 from tests.unit.fixtures import StoryFixture
 
@@ -7,7 +7,7 @@ from tests.unit.fixtures import StoryFixture
 class SceneAPITestCase(TestCase):
 
     def setUp(self):
-        self.client = Client()
+        self.client = APIClient()
         self.mock_s3 = mock_s3()
         self.mock_s3.start()
         self.fixture = StoryFixture()

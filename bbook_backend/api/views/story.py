@@ -28,6 +28,13 @@ class StoryViewSet(BaseViewSet):
             creator=user
         )
 
+    def partial_update(self, request, *args, **kwargs):
+        # patching with title is being totally lost... wtf
+        # import pdb
+        # pdb.set_trace()
+        print('====', request.data)
+        return super().partial_update(request, *args, **kwargs)
+
 
 class StoryRecordingViewSet(BaseViewSet):
     """

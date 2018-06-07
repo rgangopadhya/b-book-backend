@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import Client
+from rest_framework.test import APIClient
 from moto import mock_s3
 from bbook_backend.models import (
     SceneRecording,
@@ -13,7 +13,7 @@ from tests.unit.fixtures import StoryFixture
 class StoryAPITestCase(TestCase):
 
     def setUp(self):
-        self.client = Client()
+        self.client = APIClient()
         self.mock_s3 = mock_s3()
         self.mock_s3.start()
         self.fixture = StoryFixture()
@@ -61,11 +61,24 @@ class StoryAPITestCase(TestCase):
             story['cover_image']
         )
 
+    def test_can_save_title(self):
+        self.assertIsNone(self.fixture.story.title.name)
+        title = SimpleUploadedFile('title.mp3', b'yep')
+        self.fixture.login_user(self.client)
+        response = self.client.patch(
+            '/v0/stories/%s/' % self.fixture.story.pk,
+            data={'title': title},
+            format='multipart'
+        )
+        self.assertEqual(response.status_code, 200)
+        story = Story.objects.get(pk=self.fixture.story.pk)
+        self.assertIsNotNone(story.title.name)
+
 
 class StoryRecordingAPITestCase(TestCase):
 
     def setUp(self):
-        self.client = Client()
+        self.client = APIClient()
         self.mock_s3 = mock_s3()
         self.mock_s3.start()
         self.fixture = StoryFixture()

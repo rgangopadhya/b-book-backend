@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import Client
+from rest_framework.test import APIClient
 from moto import mock_s3
 from tests.unit.fixtures import StoryFixture
 
@@ -8,7 +8,7 @@ from tests.unit.fixtures import StoryFixture
 class SceneRecordingAPITestCase(TestCase):
 
     def setUp(self):
-        self.client = Client()
+        self.client = APIClient()
         self.mock_s3 = mock_s3()
         self.mock_s3.start()
         self.fixture = StoryFixture()
@@ -24,7 +24,7 @@ class SceneRecordingAPITestCase(TestCase):
             'story': self.fixture.story.pk,
             'recording': recording,
             'order': 0
-        })
+        }, format='multipart')
         self.assertEqual(response.status_code, 201)
         data = response.json()['scene_recording']
         self.assertIsNotNone(data['recording'])
