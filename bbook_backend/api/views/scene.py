@@ -16,8 +16,8 @@ class SceneViewSet(BaseViewSet):
         # terrible hack for sequential for prototype testing
         character_id = self.get_request_feature(
             self.FILTER
-        ).get('character', [None])[0]
-        is_sequential = character_id == 2
+        ).get('character', ['0'])[0]
+        is_sequential = int(character_id) == 2
         if random_page_size and not is_sequential:
             queryset = queryset.order_by('?')[:random_page_size]
         elif random_page_size:
