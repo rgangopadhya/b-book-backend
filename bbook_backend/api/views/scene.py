@@ -21,5 +21,6 @@ class SceneViewSet(BaseViewSet):
         if random_page_size and not is_sequential:
             queryset = queryset.order_by('?')[:random_page_size]
         elif random_page_size:
-            queryset = queryset.order_by('created_at')[:random_page_size]
+            # hack because harry legs happens to order in reverse
+            queryset = queryset.order_by('-id')[:random_page_size]
         return queryset
