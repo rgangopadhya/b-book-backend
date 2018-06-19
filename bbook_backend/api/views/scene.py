@@ -13,6 +13,13 @@ class SceneViewSet(BaseViewSet):
     def filter_queryset(self, queryset):
         queryset = super().filter_queryset(queryset)
         random_page_size = int(self.request.query_params.get('random', 0))
-        if random_page_size:
+        # terrible hack for sequential for prototype testing
+        character_id = self.get_request_feature(
+            self.FILTER
+        ).get('character', [None])[0]
+        is_sequential = character_id == 2
+        if random_page_size and not is_sequential:
             queryset = queryset.order_by('?')[:random_page_size]
+        elif random_page_size:
+            queryset = queryset.order_by('created_at')[:random_page_size]
         return queryset

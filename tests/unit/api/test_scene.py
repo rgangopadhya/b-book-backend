@@ -26,7 +26,10 @@ class SceneAPITestCase(TestCase):
 
     def test_can_retrieve_random_page(self):
         self.fixture.login_user(self.client)
-        response = self.client.get('/v0/scenes/?random=1')
+        id = self.fixture.character.id
+        response = self.client.get(
+            '/v0/scenes/?random=1&filter{character}=%s' % id
+        )
         self.assertEqual(response.status_code, 200)
         data = response.json()['scenes']
         self.assertEqual(len(data), 1)
