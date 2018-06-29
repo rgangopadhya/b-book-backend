@@ -23,12 +23,20 @@ class StorySerializer(BaseSerializer):
             'cover_image',
             'duration',
             'id',
+            'recording',
             'recordings',
+            'scenes',
+            'scene_durations',
             'title',
         )
 
+    recording = FileField()
     recordings = DynamicRelationField(
         'bbook_backend.api.serializers.SceneRecordingSerializer',
+        many=True,
+    )
+    scenes = DynamicRelationField(
+        'bbook_backend.api.serializers.SceneSerializer',
         many=True,
     )
     character = DynamicRelationField(
@@ -41,7 +49,7 @@ class StorySerializer(BaseSerializer):
     duration = DynamicMethodField(
         requires=['recordings.']
     )
-    title = FileField()
+    title = FileField(required=False)
 
     def get_cover_image(self, instance):
         image = None
@@ -56,6 +64,10 @@ class StorySerializer(BaseSerializer):
 
     def get_duration(self, instance):
         try:
+            if instance.recording is not None:
+                return sum([
+                    v for k, v in instance.scene_durations.iteritems()
+                ])
             return sum([r.duration for r in instance.recordings.all()])
         except Exception as e:
             print('get_duration failed', e)

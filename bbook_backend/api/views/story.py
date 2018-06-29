@@ -1,3 +1,4 @@
+import json
 from rest_framework.permissions import IsAuthenticated
 from .base import BaseViewSet
 from django.db import transaction
@@ -26,6 +27,28 @@ class StoryViewSet(BaseViewSet):
         user = self.request.user
         return super().filter_queryset(queryset).filter(
             creator=user
+        )
+
+    def create(self, request, *args, **kwargs):
+        # implement CreateViewMixin.create since we need to
+        # hack around the fact that we cant pass dict/list
+        # in multipart/form (may be able to do this with a custom)
+        # parser -- look into
+        data = request.data
+        modified_data = {
+            'character': data['character'],
+            'scene_durations': json.loads(data['durations']),
+            'scenes': list(map(int, data['scene_order'].split(','))),
+            'recording': data['recording']
+        }
+        serializer = self.get_serializer(data=modified_data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+            headers=headers,
         )
 
 

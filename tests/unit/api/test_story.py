@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+import json
 from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIClient
 from moto import mock_s3
@@ -61,6 +62,30 @@ class StoryAPITestCase(TestCase):
             story['cover_image']
         )
 
+    def test_can_save_single_recording(self):
+        self.fixture.login_user(self.client)
+        recording = SimpleUploadedFile('recording1.mp3', b'yep')
+        scenes = [self.fixture.scene1.pk, self.fixture.scene2.pk]
+        response = self.client.post(
+            '/v0/stories/',
+            {
+                'character': self.fixture.character.pk,
+                'durations': json.dumps({
+                    self.fixture.scene1.pk: 4.0,
+                    self.fixture.scene2.pk: 5.2,
+                }),
+                'scene_order': ','.join(map(str, scenes)),
+                'recording': recording,
+            }
+        )
+        self.assertEqual(
+            response.status_code,
+            201,
+            '%s: %s' % (response.status_code, response.content),
+        )
+        data = response.json()['story']
+        self.assertEqual(data['scenes'], scenes)
+
     def test_can_save_title(self):
         self.assertIsNone(self.fixture.story.title.name)
         title = SimpleUploadedFile('title.mp3', b'yep')
@@ -107,4 +132,3 @@ class StoryRecordingAPITestCase(TestCase):
         recordings = data['recordings']
         self.assertEqual(len(recordings), 2)
         self.assertIsNotNone(data['story'])
-        self.assertEqual(expected_order, recordings)

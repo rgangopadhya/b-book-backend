@@ -14,3 +14,8 @@ class SceneStorage(S3Boto3Storage):
 class SceneRecordingStorage(S3Boto3Storage):
     location = 'scene_recordings'
     file_overwrite = False
+
+
+class StoryStorage(S3Boto3Storage):
+    location = 'story'
+    file_overwrite = False
