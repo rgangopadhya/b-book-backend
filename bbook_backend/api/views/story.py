@@ -35,7 +35,7 @@ class StoryViewSet(BaseViewSet):
         # in multipart/form (may be able to do this with a custom)
         # parser -- look into
         data = request.data
-        print('GOT DATA', data)
+        print('GOT DATA', data, request.POST)
         modified_data = {
             'character': data['character'],
             'scene_durations': json.loads(data['durations']),
