@@ -55,10 +55,11 @@ class StorySerializer(BaseSerializer):
         image = None
         try:
             if instance.recording is not None:
-                return instance.scenes.first().image
-            image = min(
-                instance.recordings.all(), key=lambda rec: rec.order
-            ).scene.image
+                image = instance.scenes.first().image
+            else:
+                image = min(
+                    instance.recordings.all(), key=lambda rec: rec.order
+                ).scene.image
         except Exception as e:
             print('get_cover_image failed', e)
 
