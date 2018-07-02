@@ -44,7 +44,7 @@ class StorySerializer(BaseSerializer):
         required=True,
     )
     cover_image = DynamicMethodField(
-        requires=['recordings.scene.']
+        requires=['recordings.scene.', 'scenes.']
     )
     duration = DynamicMethodField(
         requires=['recordings.']
@@ -54,8 +54,13 @@ class StorySerializer(BaseSerializer):
     def get_cover_image(self, instance):
         image = None
         try:
-            if instance.recording is not None:
-                image = instance.scenes.first().image
+            if instance.scene_durations is not None:
+                scene_id = instance.scene_durations[0]['scene']
+                # take advantage of prefetching
+                image = next(
+                    scene.image for scene in instance.scenes.all()
+                    if scene.id == scene_id
+                )
             else:
                 image = min(
                     instance.recordings.all(), key=lambda rec: rec.order

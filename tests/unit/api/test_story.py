@@ -70,10 +70,10 @@ class StoryAPITestCase(TestCase):
             '/v0/stories/',
             {
                 'character': self.fixture.character.pk,
-                'durations': json.dumps({
-                    self.fixture.scene1.pk: 4.0,
-                    self.fixture.scene2.pk: 5.2,
-                }),
+                'durations': json.dumps([
+                    {'scene': self.fixture.scene2.pk, 'duration': 4.0},
+                    {'scene': self.fixture.scene1.pk, 'duration': 5.2},
+                ]),
                 'scene_order': ','.join(map(str, scenes)),
                 'recording': recording,
             }
@@ -84,7 +84,9 @@ class StoryAPITestCase(TestCase):
             '%s: %s' % (response.status_code, response.content),
         )
         data = response.json()['story']
-        self.assertEqual(data['scenes'], scenes)
+        self.assertEqual(set(data['scenes']), set(scenes))
+        # checks that the first scene is set correctly
+        self.assertIn(self.fixture.scene2.image.name, data['cover_image'])
 
     def test_can_save_title(self):
         self.assertIsNone(self.fixture.story.title.name)

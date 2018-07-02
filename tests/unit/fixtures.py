@@ -18,8 +18,8 @@ class StoryFixture():
 
     def make_story(self):
         self.make_character()
-        self.scene_image1 = SimpleUploadedFile('test.jpg', b'wooo')
-        self.scene_image2 = SimpleUploadedFile('test.jpg', b'wooo')
+        self.scene_image1 = SimpleUploadedFile('test1.jpg', b'wooo')
+        self.scene_image2 = SimpleUploadedFile('test2.jpg', b'wooo')
         self.scene1 = Scene.objects.create(
             creator=self.user,
             image=self.scene_image1,
