@@ -74,7 +74,7 @@ class StorySerializer(BaseSerializer):
         try:
             if instance.recording is not None:
                 return sum([
-                    v for k, v in instance.scene_durations.iteritems()
+                    r['duration'] for r in instance.scene_durations
                 ])
             return sum([r.duration for r in instance.recordings.all()])
         except Exception as e:
